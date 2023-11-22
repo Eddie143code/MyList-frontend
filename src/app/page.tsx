@@ -8,7 +8,7 @@ export default function Home() {
     <main className=" flex flex-col">
       <section className="flex flex-col justify-center text-center mt-28 gap-14">
         <Button lg text={"Sign up"} location="/sign-up" />
-        <Button lg text={"Login"} />
+        <Button lg text={"Login"} location="/login" />
         <Button lg text={"Guest"} />
       </section>
     </main>

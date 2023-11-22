@@ -6,16 +6,13 @@ const page = () => {
   return (
     <main>
       <section className="flex justify-center text-center">
-        <form className="flex flex-wrap gap-8 mt-10 lg:w-[50%]">
+        <form className="flex flex-wrap gap-8 mt-10 lg:w-[50%] lg:max-w-[1000px]">
           <Input id="Name" />
           <Input id="Surname" />
-          <Input id="Email" />
-          <div className="hidden lg:block"></div>
+          <Input id="Email" width />
           <Input id="Password" />
           <Input id="Retype Password" />
-          <div className="w-[100%] ml-[50px] lg:ml-[58px]">
-            <Button md text="Submit" />
-          </div>
+          <Button md text="Submit" type="button" />
         </form>
       </section>
     </main>
