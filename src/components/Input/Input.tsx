@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ id, width }: any) => {
+const Input = ({ id, width, value, onChange }: any) => {
   return (
     <div
       className={`flex flex-col justify-center gap-2 w-[100%] 
@@ -18,7 +18,13 @@ const Input = ({ id, width }: any) => {
         <label htmlFor={id}>{id}</label>
       </div>
 
-      <input id={id} type="text" className="border h-12" />
+      <input
+        value={value}
+        onChange={onChange}
+        id={id}
+        type="text"
+        className="border h-12"
+      />
     </div>
   );
 };
