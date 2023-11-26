@@ -1,32 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
+import { useGlobalContext } from "@/state/context/ListContext";
 
 const page = () => {
   const [addList, setAddList] = useState<boolean>(false);
   const [currentAddList, setCurrentAddList] = useState<string>("");
-  const [allLists, setAllLists] = useState<any>([
-    {
-      id: 1,
-      name: "Movies",
-      items: [
-        { id: 1, name: "Avatar" },
-        { id: 2, name: "The Avengers" },
-        { id: 3, name: "Kill Bill" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Books",
-      items: [
-        { id: 4, name: "Avatar" },
-        { id: 5, name: "The Hobbit" },
-        { id: 6, name: "The Lord of the Rings" },
-      ],
-    },
-    { id: 3, name: "Anime", items: [] },
-  ]);
+  const [allLists, setAllLists] = useState<any>([]);
+
+  const { Lists, changeData } = useGlobalContext();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -40,6 +23,9 @@ const page = () => {
     setAddList(false);
   };
 
+  useEffect(() => {
+    console.log(Lists);
+  }, [Lists]);
   return (
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
