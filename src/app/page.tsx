@@ -9,7 +9,7 @@ export default function Home() {
       <section className="flex flex-col justify-center text-center mt-28 gap-14">
         <Button lg text={"Sign up"} location="/sign-up" />
         <Button lg text={"Login"} location="/login" />
-        <Button lg text={"Guest"} />
+        <Button lg text={"Guest"} location="/lists" />
       </section>
     </main>
   );

@@ -6,35 +6,34 @@ import { useGlobalContext } from "@/state/context/ListContext";
 
 const page = () => {
   const [addList, setAddList] = useState<boolean>(false);
-  const [currentAddList, setCurrentAddList] = useState<string>("");
-  const [allLists, setAllLists] = useState<any>([]);
+  const [currentListItem, setCurrentListItem] = useState<string>("");
 
-  const { Lists, changeData } = useGlobalContext();
+  const { Lists, addNewList } = useGlobalContext();
+  const [allLists, setAllLists] = useState<any>(Lists);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const newItem = [
       ...allLists,
-      { id: allLists.length + 1, name: currentAddList, items: [] },
+      { id: allLists.length + 1, name: currentListItem, items: [] },
     ];
 
     setAllLists(newItem);
-    setCurrentAddList("");
+    addNewList({ id: allLists.length + 1, name: currentListItem, items: [] });
+    setCurrentListItem("");
     setAddList(false);
   };
 
-  useEffect(() => {
-    console.log(Lists);
-  }, [Lists]);
+  useEffect(() => {}, [Lists]);
   return (
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
-        <button onClick={() => console.log(allLists)}>log</button>
+        <button onClick={() => console.log(Lists)}>log</button>
         <div className="text-end w-[90%] lg:w-[100%]">
           <Button md text="Add List" clickMethod={() => setAddList(!addList)} />
         </div>
         <div className="flex flex-wrap w-[100%] min-w-[230px]  ">
-          {allLists.length > 0 ? (
+          {allLists ? (
             allLists.map((list: any) => {
               return (
                 <div
@@ -70,8 +69,8 @@ const page = () => {
               className="w-[100%] lg:w-[33%] lg:flex lg:flex-col lg:items-center my-10"
             >
               <Input
-                value={currentAddList}
-                onChange={(e: any) => setCurrentAddList(e.target.value)}
+                value={currentListItem}
+                onChange={(e: any) => setCurrentListItem(e.target.value)}
               />
               <div className="mt-5">
                 <Button xs text="Submit" type="submit" />

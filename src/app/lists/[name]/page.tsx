@@ -1,38 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useGlobalContext } from "@/state/context/ListContext";
 
-const allLists = [
-  {
-    id: 1,
-    name: "Movies",
-    items: [
-      { id: 1, name: "Avatar" },
-      { id: 2, name: "The Avengers" },
-      { id: 3, name: "Kill Bill" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Books",
-    items: [
-      { id: 4, name: "Avatar" },
-      { id: 5, name: "The Hobbit" },
-      { id: 6, name: "The Lord of the Rings" },
-    ],
-  },
-  { id: 3, name: "Anime", items: [] },
-];
 const page = ({ params }: any) => {
   const [addItem, setAddItem] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<string>("");
-  const myList = allLists.find(
-    (list: any) => list.name.toLowerCase() === params.name.toLowerCase()
-  );
-  const [currentList, setCurrentList] = useState<any>(myList);
-  // console.log(currentList);
+  const { Lists, addNewList, findList, addNewItem } = useGlobalContext();
+
+  const [currentList, setCurrentList] = useState<any>("");
+  console.log(params);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -40,9 +19,22 @@ const page = ({ params }: any) => {
       ...currentList.items,
       { id: currentList.items.length + 1, name: currentItem },
     ];
-
+    addNewItem({
+      list: currentList,
+      item: { id: currentList.items.length + 1, name: currentItem },
+    });
     setCurrentList({ ...currentList, items: [...newItem] });
   };
+
+  useEffect(() => {
+    console.log(currentList);
+    if (!currentList) {
+      const l = findList(params.name);
+      console.log(l);
+
+      setCurrentList(l);
+    }
+  }, []);
 
   return (
     <main className="flex flex-col items-center w-[90%]">
@@ -52,7 +44,7 @@ const page = ({ params }: any) => {
           <Button md text="Add Item" clickMethod={() => setAddItem(!addItem)} />
         </div>
         <div className="flex flex-wrap w-[100%] min-w-[230px] ">
-          {currentList.items.length > 0 ? (
+          {currentList ? (
             currentList.items.map((item: any) => {
               return (
                 <div
