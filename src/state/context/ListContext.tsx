@@ -35,6 +35,11 @@ export const AppProvider = ({ children }: any) => {
     dispatch({ type: "ADD_NEW_LIST", payload: req });
   };
 
+  const editList = (req: any) => {
+    console.log("this is request in editList: ", req);
+    dispatch({type: "EDIT_EXISTING_LIST", payload: req})
+  }
+
   const findList = (req: any) => {
     const myList = state.Lists.find(
       (list: any) => list.name.toLowerCase() === req.toLowerCase()
@@ -48,7 +53,7 @@ export const AppProvider = ({ children }: any) => {
     dispatch({ type: "ADD_NEW_ITEM", payload: req });
   };
   return (
-    <AppContext.Provider value={{ ...state, addNewList, findList, addNewItem }}>
+    <AppContext.Provider value={{ ...state, addNewList, findList, addNewItem, editList }}>
       {children}
     </AppContext.Provider>
   );

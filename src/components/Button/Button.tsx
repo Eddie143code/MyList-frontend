@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const Button = ({ lg, md, sm, xs, text, location, type, clickMethod }: any) => {
+const Button = ({ lg, md, sm, xs, text, location, type, clickMethod, editClick, id }: any) => {
   const router = useRouter();
   let btnStyle: string = "";
   if (lg) {
@@ -39,6 +39,19 @@ const Button = ({ lg, md, sm, xs, text, location, type, clickMethod }: any) => {
         onClick={() => {
           clickMethod();
         }}
+      >
+        {text}
+      </button>
+    );
+  }
+
+  
+  if (editClick) {
+    return (
+      <button
+        className={btnStyle}
+        type={type}
+        onClick={editClick(id)}
       >
         {text}
       </button>

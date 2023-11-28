@@ -11,7 +11,7 @@ export const reducer = (state: any, action: any) => {
       console.log("in addNewList");
 
       const newL = state.Lists.map((l: any) => {
-        if (l.name == action.payload.list.name) {
+        if (l.id == action.payload.list.id) {
           return {
             ...state.Lists[action.payload.list.id - 1],
             items: [
@@ -25,7 +25,18 @@ export const reducer = (state: any, action: any) => {
       console.log(newL);
 
       return {
-        Lists: [...newL],
+        Lists: [...newL], 
       };
+
+      case "EDIT_EXISTING_LIST":
+        const newnewL = state.Lists.map((l: any)=>{
+          if(l.id === action.payload.id){
+            return {...action.payload, items: l.items}
+          }
+          return l
+        })
+        console.log(newnewL);
+        
+        return { Lists:[...newnewL]}
   }
 };
