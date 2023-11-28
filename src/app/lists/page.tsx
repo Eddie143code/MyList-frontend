@@ -19,7 +19,7 @@ const Page = () => {
 
   useEffect(() => {
     
-    console.log(editState);
+    
     
   }, [Lists]);
 
@@ -64,14 +64,14 @@ const Page = () => {
    // console.log(editState);
     
     const newList = allLists.map((list: any)=>{
-if(list.id == newItem.id){
-  return newItem
-}
-return list
-    } )
-    setAllLists(newList)
- editList(newItem)
-   
+      if(list.id == newItem.id){
+        return newItem
+      }
+      return list
+          } )
+          setAllLists(newList)
+      editList(newItem)
+        
   }
 
   return (

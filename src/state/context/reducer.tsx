@@ -38,5 +38,21 @@ export const reducer = (state: any, action: any) => {
         console.log(newnewL);
         
         return { Lists:[...newnewL]}
+
+        case "EDIT_EXISTING_ITEM":
+          const newnewI = state.Lists.map((l: any)=> {
+            if(l.id === action.payload.list.id){
+              const nnI = l.items.map((ll: any)=> {
+                if(l.items.id === action.payload.item.id){
+                  return action.payload.item
+                }
+                return ll
+              })
+              return nnI
+            }
+            return l
+          })
+
+          return {Lists: [...newnewI]}
   }
 };
