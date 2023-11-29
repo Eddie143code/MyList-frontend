@@ -25,34 +25,41 @@ export const reducer = (state: any, action: any) => {
       console.log(newL);
 
       return {
-        Lists: [...newL], 
+        Lists: [...newL],
       };
 
-      case "EDIT_EXISTING_LIST":
-        const newnewL = state.Lists.map((l: any)=>{
-          if(l.id === action.payload.id){
-            return {...action.payload, items: l.items}
-          }
-          return l
-        })
-        console.log(newnewL);
-        
-        return { Lists:[...newnewL]}
+    case "EDIT_EXISTING_LIST":
+      const newnewL = state.Lists.map((l: any) => {
+        if (l.id === action.payload.id) {
+          return { ...action.payload, items: l.items };
+        }
+        return l;
+      });
+      console.log(newnewL);
 
-        case "EDIT_EXISTING_ITEM":
-          const newnewI = state.Lists.map((l: any)=> {
-            if(l.id === action.payload.list.id){
-              const nnI = l.items.map((ll: any)=> {
-                if(l.items.id === action.payload.item.id){
-                  return action.payload.item
-                }
-                return ll
-              })
-              return nnI
+      return { Lists: [...newnewL] };
+
+    case "EDIT_EXISTING_ITEM":
+      const newnewI = state.Lists.map((l: any) => {
+        if (l.id === action.payload.list.id) {
+          const nnI = l.items.map((ll: any) => {
+            if (ll.id === action.payload.item.id) {
+              return action.payload.item;
             }
-            return l
-          })
+            return ll;
+          });
+          console.log(nnI);
 
-          return {Lists: [...newnewI]}
+          return {
+            id: action.payload.list.id,
+            name: action.payload.list.name,
+            items: [...nnI],
+          };
+        }
+        return l;
+      });
+      console.log(newnewI);
+
+      return { Lists: [...newnewI] };
   }
 };

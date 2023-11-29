@@ -10,25 +10,21 @@ const Page = () => {
   const { Lists, addNewList, editList } = useGlobalContext();
   const [allLists, setAllLists] = useState<any>(Lists);
 
-  const newEditList = Lists.map((list:any)=> {
-    return {id: list.id, edit: false}
-  })
-  
+  const newEditList = Lists.map((list: any) => {
+    return { id: list.id, edit: false };
+  });
+
   // Use an object to track the edit state for each list
   const [editState, setEditState] = useState<any>(newEditList);
 
-  useEffect(() => {
-    
-    
-    
-  }, [Lists]);
+  useEffect(() => {}, [Lists]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const newItem = {
       id: allLists.length + 1,
       name: currentListItem,
-      items: []
+      items: [],
     };
 
     setAllLists([...allLists, newItem]);
@@ -38,41 +34,44 @@ const Page = () => {
   };
 
   const handleEdit = (id: any) => {
-    const newL = editState.map((list: any)=> {
-      if(list.id === id){
-        return {id: list.id, edit: true}
+    const newL = editState.map((list: any) => {
+      if (list.id === id) {
+        return { id: list.id, edit: true };
       }
-      return list
-    })
-    setEditState(newL)
-  }
+      return list;
+    });
+    setEditState(newL);
+  };
 
   const handleEditSubmit = (e: any) => {
     e.preventDefault();
-    const findL = editState.find((l:any)=>{if(l.edit === true) return l})
+    const findL = editState.find((l: any) => {
+      if (l.edit === true) return l;
+    });
     console.log(findL);
-    
+
     const newItem = {
       id: findL.id,
       name: currentListItem,
-      items: []
+      items: [],
     };
     //console.log(newItem);
-    
-    const nn = editState.map((l:any)=>{return {id: l.id, edit: false}})
-    setEditState(nn)
-   // console.log(editState);
-    
-    const newList = allLists.map((list: any)=>{
-      if(list.id == newItem.id){
-        return newItem
+
+    const nn = editState.map((l: any) => {
+      return { id: l.id, edit: false };
+    });
+    setEditState(nn);
+    // console.log(editState);
+
+    const newList = allLists.map((list: any) => {
+      if (list.id == newItem.id) {
+        return newItem;
       }
-      return list
-          } )
-          setAllLists(newList)
-      editList(newItem)
-        
-  }
+      return list;
+    });
+    setAllLists(newList);
+    editList(newItem);
+  };
 
   return (
     <main className="flex flex-col items-center w-[90%]">
@@ -94,7 +93,9 @@ const Page = () => {
                     id={list.id}
                     className="w-[120px] text-4xl"
                     disabled={!editState[list.id]}
-                    value={editState[list.id-1].edit ? currentListItem : list.name}
+                    value={
+                      editState[list.id - 1].edit ? currentListItem : list.name
+                    }
                     onChange={(e: any) => {
                       if (editState[list.id]) {
                         setCurrentListItem(e.target.value);
@@ -102,12 +103,24 @@ const Page = () => {
                     }}
                   />
                   <span className="ml-2">
-                  <Button type="button" xs text={editState[list.id-1].edit ? "Cancel": "Edit"} clickMethod={() => handleEdit(list.id)} />
-                    {editState[list.id-1].edit  &&<Button type="submit" xs text={"Save"}  />  }
+                    <Button
+                      type="button"
+                      xs
+                      text={editState[list.id - 1].edit ? "Cancel" : "Edit"}
+                      clickMethod={() => handleEdit(list.id)}
+                    />
+                    {editState[list.id - 1].edit && (
+                      <Button type="submit" xs text={"Save"} />
+                    )}
                   </span>
                 </h1>
                 <div className="lg:mt-5">
-                  <Button sm text="See more" location={`/lists/${list.name.toLowerCase()}`} />
+                  <Button
+                    sm
+                    text="See more"
+                    type="button"
+                    location={`/lists/${list.name.toLowerCase()}`}
+                  />
                 </div>
               </form>
             ))
@@ -129,7 +142,11 @@ const Page = () => {
               />
               <div className="mt-5">
                 <Button xs text="Submit" type="submit" />
-                <Button xs text="Cancel" clickMethod={() => setAddList(false)} />
+                <Button
+                  xs
+                  text="Cancel"
+                  clickMethod={() => setAddList(false)}
+                />
               </div>
             </form>
           )}
@@ -140,4 +157,3 @@ const Page = () => {
 };
 
 export default Page;
-
