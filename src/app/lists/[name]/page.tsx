@@ -97,7 +97,7 @@ const page = ({ params }: any) => {
         </div>
         <div className="flex flex-wrap w-[100%] min-w-[230px] ">
           {currentList ? (
-            currentList.items.map((item: any) => {
+            currentList.items.map((item: any, i: any) => {
               return (
                 <form
                   className="w-[80%] lg:w-[33%] lg:flex lg:flex-col lg:items-center mb-10"
@@ -108,12 +108,10 @@ const page = ({ params }: any) => {
                     <input
                       id={item.id}
                       className="w-[120px] text-4xl"
-                      disabled={!editState[item.id]}
-                      value={
-                        editState[item.id - 1].edit ? currentItem : item.name
-                      }
+                      disabled={!editState[i]}
+                      value={editState[i].edit ? currentItem : item.name}
                       onChange={(e: any) => {
-                        if (editState[item.id]) {
+                        if (editState[i]) {
                           setCurrentItem(e.target.value);
                         }
                       }}
@@ -122,10 +120,10 @@ const page = ({ params }: any) => {
                       <Button
                         type="button"
                         xs
-                        text={editState[item.id - 1].edit ? "Cancel" : "Edit"}
+                        text={editState[i].edit ? "Cancel" : "Edit"}
                         clickMethod={() => handleEdit(item.id)}
                       />
-                      {editState[item.id - 1].edit && (
+                      {editState[i].edit && (
                         <Button type="submit" xs text={"Save"} />
                       )}
                     </span>
