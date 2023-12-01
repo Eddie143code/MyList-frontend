@@ -8,7 +8,7 @@ import { useGlobalContext } from "@/state/context/ListContext";
 const page = ({ params }: any) => {
   const [addItem, setAddItem] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<string>("");
-  const { Lists, addNewList, findList, addNewItem, editItem } =
+  const { Lists, addNewList, findList, addNewItem, editItem, deleteItem } =
     useGlobalContext();
 
   const [currentList, setCurrentList] = useState<any>("");
@@ -88,12 +88,40 @@ const page = ({ params }: any) => {
     editItem({ list: currentList, item: newItem });
   };
 
+  const handleDelete = (id: any) => {
+    const fillItems = currentList.items.filter((item: any) => item.id !== id);
+    const fillList = {
+      id: currentList.id,
+      name: currentList.name,
+      items: fillItems,
+    };
+    const fillState = fillItems.map((l: any) => {
+      return { id: l.id, edit: false };
+    });
+
+    // console.log(fillState);
+
+    setEditState(fillState);
+    setCurrentList(fillList);
+    deleteItem(fillList);
+  };
+
   return (
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
         <button onClick={() => console.log(editState)}>log</button>
         <div className="text-end w-[90%] lg:w-[100%]">
-          <Button md text="Add Item" clickMethod={() => setAddItem(!addItem)} />
+          <Button
+            md
+            text="Add Item"
+            clickMethod={() => {
+              setAddItem(!addItem);
+              const closeEdit = currentList.items.map((l: any) => {
+                return { id: l.id, edit: false };
+              });
+              setEditState(closeEdit);
+            }}
+          />
         </div>
         <div className="flex flex-wrap w-[100%] min-w-[230px] ">
           {currentList ? (
@@ -126,6 +154,12 @@ const page = ({ params }: any) => {
                       {editState[i].edit && (
                         <Button type="submit" xs text={"Save"} />
                       )}
+                      <Button
+                        type="button"
+                        xs
+                        text={"delete"}
+                        clickMethod={() => handleDelete(item.id)}
+                      />
                     </span>
                   </h1>
                   {/*          <div className="lg:mt-5">

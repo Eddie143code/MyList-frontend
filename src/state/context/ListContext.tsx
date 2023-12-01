@@ -62,6 +62,11 @@ export const AppProvider = ({ children }: any) => {
     console.log("this is request in editItem: ", req);
     dispatch({ type: "EDIT_EXISTING_ITEM", payload: req });
   };
+
+  const deleteItem = (req: any) => {
+    console.log("this is request in editItem: ", req);
+    dispatch({ type: "DELETE_EXISTING_ITEM", payload: req });
+  };
   return (
     <AppContext.Provider
       value={{
@@ -72,6 +77,7 @@ export const AppProvider = ({ children }: any) => {
         findList,
         addNewItem,
         editItem,
+        deleteItem,
       }}
     >
       {children}

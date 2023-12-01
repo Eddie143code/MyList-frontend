@@ -69,5 +69,15 @@ export const reducer = (state: any, action: any) => {
       console.log(newnewI);
 
       return { Lists: [...newnewI] };
+
+    case "DELETE_EXISTING_ITEM":
+      const nDI = state.Lists.map((list: any) => {
+        if (list.id === action.payload.id) {
+          return action.payload;
+        }
+        return list;
+      });
+
+      return { Lists: [...nDI] };
   }
 };
