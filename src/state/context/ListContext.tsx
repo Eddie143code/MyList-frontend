@@ -1,6 +1,7 @@
 "use client";
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
+import { registerUserService } from "../services/userService/userService";
 
 const initialState: any = {
   Lists: [
@@ -67,6 +68,12 @@ export const AppProvider = ({ children }: any) => {
     console.log("this is request in editItem: ", req);
     dispatch({ type: "DELETE_EXISTING_ITEM", payload: req });
   };
+
+  const userRegister = (req: any) => {
+    // console.log(req);
+
+    return registerUserService(req);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -78,6 +85,7 @@ export const AppProvider = ({ children }: any) => {
         addNewItem,
         editItem,
         deleteItem,
+        userRegister,
       }}
     >
       {children}
