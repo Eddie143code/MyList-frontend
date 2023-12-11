@@ -18,7 +18,7 @@ const page = () => {
       `first name: ${firstName.current?.value}, surname: ${surname.current?.value}, email: ${email.current?.value}, password: ${password.current?.value}, validate password: ${validatePassword.current?.value}`
     );
     const obj = {
-      UserName: email.current?.value,
+      Email: email.current?.value,
       Password: password.current?.value,
     };
     // console.log(obj);

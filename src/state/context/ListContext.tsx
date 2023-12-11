@@ -1,7 +1,10 @@
 "use client";
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
-import { registerUserService } from "../services/userService/userService";
+import {
+  loginUserService,
+  registerUserService,
+} from "../services/userService/userService";
 
 const initialState: any = {
   Lists: [
@@ -74,6 +77,10 @@ export const AppProvider = ({ children }: any) => {
 
     return registerUserService(req);
   };
+
+  const userLogin = (req: any) => {
+    return loginUserService(req);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -86,6 +93,7 @@ export const AppProvider = ({ children }: any) => {
         editItem,
         deleteItem,
         userRegister,
+        userLogin,
       }}
     >
       {children}

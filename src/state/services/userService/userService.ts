@@ -1,13 +1,18 @@
 import axios from "axios";
+const url = process.env.NEXT_PUBLIC_URL;
+
 export const registerUserService = async (payload: any) => {
-  const yo = {
-    Email: "yo@gmail.com",
-    Password: "Momo@11",
-    // ... other properties from your payload if needed
-  };
-  const response = await axios.post(
-    "http://localhost:8080/api/Account/login",
-    yo
-  );
+  console.log(payload);
+
+  const response = await axios.post(`${url}/Account/register`, payload);
+  return response;
+};
+
+export const loginUserService = async (payload: any) => {
+  console.log(payload);
+
+  const response = await axios.post(`${url}/Account/login`, payload);
   console.log(response);
+
+  return response;
 };
