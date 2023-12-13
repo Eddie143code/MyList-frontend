@@ -9,7 +9,7 @@ const page = () => {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
-  const { userLogin } = useGlobalContext();
+  const { userLogin, getAllLists } = useGlobalContext();
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(

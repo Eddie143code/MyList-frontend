@@ -7,19 +7,28 @@ import { useGlobalContext } from "@/state/context/ListContext";
 const Page = () => {
   const [addList, setAddList] = useState<boolean>(false);
   const [currentListItem, setCurrentListItem] = useState<string>("");
-  const { Lists, addNewList, editList, deleteList } = useGlobalContext();
-  const [allLists, setAllLists] = useState<any>(Lists);
+  const { Lists, addNewList, editList, deleteList, getAllLists } =
+    useGlobalContext();
+  const [allLists, setAllLists] = useState<any>("");
 
-  const newEditList = Lists.map((list: any) => {
-    return { id: list.id, edit: false };
-  });
+  /*  */
 
   // Use an object to track the edit state for each list
-  const [editState, setEditState] = useState<any>(newEditList);
+  const [editState, setEditState] = useState<any>([]);
 
   useEffect(() => {
     // console.log(Lists);
     // console.log(editState);
+    if (!allLists) {
+      getAllLists().then((l: any) => {
+        setAllLists(l);
+        const newEditList = l.map((list: any) => {
+          return { id: list.id, edit: false };
+        });
+        setEditState(newEditList);
+        console.log(l);
+      });
+    }
   }, [Lists]);
 
   const handleSubmit = (e: any) => {
@@ -100,6 +109,7 @@ const Page = () => {
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
         <button onClick={() => console.log(Lists)}>log</button>
+        <button onClick={() => console.log(allLists)}>log</button>
         <div className="text-end w-[90%] lg:w-[100%]">
           <Button
             md
@@ -119,7 +129,7 @@ const Page = () => {
               return (
                 <form
                   className="w-[80%] lg:w-[33%] lg:flex lg:flex-col lg:items-center mb-10"
-                  key={list.id}
+                  key={list.myListId}
                   onSubmit={handleEditSubmit}
                 >
                   <h1 className="lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:w-[100%] lg:h-[100%]">
@@ -164,11 +174,7 @@ const Page = () => {
               );
             })
           ) : (
-            <div className="w-[100%] lg:w-[100%] lg:flex lg:flex-col lg:items-center mb-10">
-              <h1>
-                <span className="text-4xl">You have no lists</span>
-              </h1>
-            </div>
+            <div></div>
           )}
           {addList && (
             <form
@@ -196,3 +202,11 @@ const Page = () => {
 };
 
 export default Page;
+
+{
+  /* <div className="w-[100%] lg:w-[100%] lg:flex lg:flex-col lg:items-center mb-10">
+              <h1>
+                <span className="text-4xl">You have no lists</span>
+              </h1>
+            </div>*/
+}

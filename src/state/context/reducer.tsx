@@ -1,5 +1,12 @@
 export const reducer = (state: any, action: any) => {
   switch (action.type) {
+    case "GET_LISTS":
+      // console.log("in getList: ", action.payload);
+      const gL = action.payload;
+      return {
+        ...state,
+        Lists: [...gL],
+      };
     case "ADD_NEW_LIST":
       console.log("in addNewList");
       return {

@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = process.env.NEXT_PUBLIC_URL;
+const url = process.env.NEXT_PUBLIC_API;
 
 export const registerUserService = async (payload: any) => {
   console.log(payload);

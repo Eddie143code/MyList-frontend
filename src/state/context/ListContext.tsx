@@ -1,39 +1,26 @@
 "use client";
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
-import {
-  loginUserService,
-  registerUserService,
-} from "../services/userService/userService";
+import { loginUserService, registerUserService } from "../services/userService";
+import { fetchAllLists } from "../services/ListService";
 
 const initialState: any = {
-  Lists: [
-    {
-      id: 1,
-      name: "Movies",
-      items: [
-        { id: 1, name: "Avatar" },
-        { id: 2, name: "The Avengers" },
-        { id: 3, name: "Kill Bill" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Books",
-      items: [
-        { id: 4, name: "Avatar" },
-        { id: 5, name: "The Hobbit" },
-        { id: 6, name: "The Lord of the Rings" },
-      ],
-    },
-    { id: 3, name: "Anime", items: [] },
-  ],
+  Lists: [],
 };
 
 const AppContext = createContext(initialState);
 
 export const AppProvider = ({ children }: any) => {
   const [state, dispatch]: any = useReducer(reducer, initialState);
+
+  const getAllLists = async () => {
+    console.log("in getAllLists context");
+    const res = await fetchAllLists();
+    dispatch({ type: "GET_LISTS", payload: res });
+    //  console.log(res);
+
+    return res;
+  };
 
   const addNewList = (req: any) => {
     dispatch({ type: "ADD_NEW_LIST", payload: req });
@@ -75,11 +62,11 @@ export const AppProvider = ({ children }: any) => {
   const userRegister = (req: any) => {
     // console.log(req);
 
-    return registerUserService(req);
+    registerUserService(req);
   };
 
   const userLogin = (req: any) => {
-    return loginUserService(req);
+    loginUserService(req);
   };
   return (
     <AppContext.Provider
@@ -94,6 +81,7 @@ export const AppProvider = ({ children }: any) => {
         deleteItem,
         userRegister,
         userLogin,
+        getAllLists,
       }}
     >
       {children}
