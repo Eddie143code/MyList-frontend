@@ -32,7 +32,7 @@ const page = ({ params }: any) => {
     // console.log(currentList);
     if (!currentList) {
       const l = findList(params.name);
-      // console.log(l);
+      console.log(l);
       setCurrentList(l);
       const newEditItems = l.items.map((list: any) => {
         return { id: list.id, edit: false };
@@ -129,7 +129,7 @@ const page = ({ params }: any) => {
               return (
                 <form
                   className="w-[80%] lg:w-[33%] lg:flex lg:flex-col lg:items-center mb-10"
-                  key={item.id}
+                  key={item.myListId}
                   onSubmit={handleEditSubmit}
                 >
                   <h1 className="lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:w-[100%] lg:h-[100%]">
