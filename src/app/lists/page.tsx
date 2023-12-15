@@ -16,9 +16,7 @@ const Page = () => {
   // Use an object to track the edit state for each list
   const [editState, setEditState] = useState<any>([]);
 
-  useEffect(() => {
-    // console.log(Lists);
-    // console.log(editState);
+  const getListsDB = () => {
     if (!allLists) {
       getAllLists().then((l: any) => {
         setAllLists(l);
@@ -26,29 +24,39 @@ const Page = () => {
           return { id: list.id, edit: false };
         });
         setEditState(newEditList);
-        console.log(l);
+        // console.log(l);
       });
     }
+  };
+  useEffect(() => {
+    // console.log(Lists);
+    // console.log(editState);
+
+    getListsDB();
   }, [Lists]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const newItem = {
-      id: allLists.length + 1,
-      name: currentListItem,
-      items: [],
+      //id: allLists.length + 1,
+      Name: currentListItem,
     };
 
-    setAllLists([...allLists, newItem]);
+    // setAllLists([...allLists, newItem]);
 
-    const nL = [...allLists, newItem];
+    /*  const nL = [...allLists, newItem];
     const newEdState = nL.map((l: any) => {
       return { id: l.id, edit: false };
     });
-    setEditState(newEdState);
+
+    */
+    // setEditState(newEdState);
+
+    setAllLists("");
     addNewList(newItem);
     setCurrentListItem("");
     setAddList(false);
+    getListsDB();
   };
 
   const handleEdit = (id: any) => {
@@ -92,7 +100,7 @@ const Page = () => {
   };
 
   const handleDelete = (id: any) => {
-    const fillList = allLists.filter((list: any) => list.id !== id);
+    /* const fillList = allLists.filter((list: any) => list.id !== id);
 
     const fillState = fillList.map((l: any) => {
       return { id: l.id, edit: false };
@@ -100,9 +108,14 @@ const Page = () => {
 
     // console.log(fillState);
 
+
     setEditState(fillState);
     setAllLists(fillList);
+    */
     deleteList(id);
+    setAllLists("");
+
+    getListsDB();
   };
 
   return (
@@ -158,7 +171,7 @@ const Page = () => {
                         type="button"
                         xs
                         text={"delete"}
-                        clickMethod={() => handleDelete(list.id)}
+                        clickMethod={() => handleDelete(list.myListId)}
                       />
                     </span>
                   </h1>

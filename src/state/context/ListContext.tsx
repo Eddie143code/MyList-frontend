@@ -2,7 +2,11 @@
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
 import { loginUserService, registerUserService } from "../services/userService";
-import { fetchAllLists } from "../services/ListService";
+import {
+  createList,
+  deleteExistingList,
+  fetchAllLists,
+} from "../services/ListService";
 
 const initialState: any = {
   Lists: [],
@@ -14,7 +18,7 @@ export const AppProvider = ({ children }: any) => {
   const [state, dispatch]: any = useReducer(reducer, initialState);
 
   const getAllLists = async () => {
-    console.log("in getAllLists context");
+    //  console.log("in getAllLists context");
     const res = await fetchAllLists();
     dispatch({ type: "GET_LISTS", payload: res });
     //  console.log(res);
@@ -22,8 +26,9 @@ export const AppProvider = ({ children }: any) => {
     return res;
   };
 
-  const addNewList = (req: any) => {
-    dispatch({ type: "ADD_NEW_LIST", payload: req });
+  const addNewList = async (req: any) => {
+    const res = await createList(req);
+    dispatch({ type: "ADD_NEW_LIST", payload: res });
   };
 
   const editList = (req: any) => {
@@ -31,8 +36,9 @@ export const AppProvider = ({ children }: any) => {
     dispatch({ type: "EDIT_EXISTING_LIST", payload: req });
   };
 
-  const deleteList = (req: any) => {
-    console.log("this is request in deleteList: ", req);
+  const deleteList = async (req: any) => {
+    //console.log("this is request in deleteList: ", req);
+    const res = await deleteExistingList(req);
     dispatch({ type: "DELETE_EXISTING_LIST", payload: req });
   };
 
@@ -41,6 +47,11 @@ export const AppProvider = ({ children }: any) => {
       (list: any) => list.name.toLowerCase() === req.toLowerCase()
     );
     return myList;
+  };
+
+  const getItemsList = (req: any) => {
+    const l = req.payload;
+    dispatch({ type: "" });
   };
 
   const addNewItem = (req: any) => {

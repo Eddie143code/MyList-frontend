@@ -7,10 +7,10 @@ export const reducer = (state: any, action: any) => {
         ...state,
         Lists: [...gL],
       };
+
     case "ADD_NEW_LIST":
       console.log("in addNewList");
       return {
-        ...state,
         Lists: [...state.Lists, action.payload],
       };
 
