@@ -1,5 +1,6 @@
 export const reducer = (state: any, action: any) => {
   switch (action.type) {
+    // ITEM
     case "GET_LISTS":
       // console.log("in getList: ", action.payload);
       const gL = action.payload;
@@ -33,16 +34,17 @@ export const reducer = (state: any, action: any) => {
 
       return { Lists: [...newDL] };
 
+    // ITEM
     case "ADD_NEW_ITEM":
       console.log("in addNewList");
 
       const newL = state.Lists.map((l: any) => {
-        if (l.id == action.payload.list.id) {
+        if (l.myListId == action.payload.myListId) {
           return {
-            ...state.Lists[action.payload.list.id - 1],
+            ...state.Lists[action.payload.myListI],
             items: [
-              ...state.Lists[action.payload.list.id - 1].items,
-              action.payload.item,
+              ...state.Lists[action.payload.myListId].items,
+              { itemId: action.payload.itemId, name: action.payload.name },
             ],
           };
         }

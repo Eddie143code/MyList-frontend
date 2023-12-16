@@ -1,13 +1,14 @@
 "use client";
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
-import { loginUserService, registerUserService } from "../services/userService";
+import { loginUserService, registerUserService } from "../services/UserService";
 import {
   createList,
   deleteExistingList,
   editExistingList,
   fetchAllLists,
 } from "../services/ListService";
+import { createItem } from "../services/ItemService";
 
 const initialState: any = {
   Lists: [],
@@ -62,21 +63,27 @@ export const AppProvider = ({ children }: any) => {
   };
 
   const findList = (req: any) => {
-    const myList = state.Lists.find(
-      (list: any) => list.name.toLowerCase() === req.toLowerCase()
-    );
+    //  console.log(state);
+
+    const myList = state.Lists.find((list: any) => list.name === req);
+    //   console.log(myList);
+
     return myList;
   };
 
   const getItemsList = (req: any) => {
     const l = req.payload;
+
     dispatch({ type: "" });
   };
 
-  const addNewItem = (req: any) => {
+  const addNewItem = async (req: any) => {
     console.log("this is request: ", req);
+    const res = await createItem(req);
+    console.log(res);
 
-    dispatch({ type: "ADD_NEW_ITEM", payload: req });
+    dispatch({ type: "ADD_NEW_ITEM", payload: res });
+    return res;
   };
 
   const editItem = (req: any) => {

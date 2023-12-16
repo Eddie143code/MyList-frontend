@@ -4,42 +4,65 @@ import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useGlobalContext } from "@/state/context/ListContext";
+import { createItem } from "@/state/services/ItemService";
 
 const page = ({ params }: any) => {
   const [addItem, setAddItem] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<string>("");
-  const { Lists, addNewList, findList, addNewItem, editItem, deleteItem } =
-    useGlobalContext();
+  const {
+    Lists,
+    addNewList,
+    findList,
+    addNewItem,
+    editItem,
+    deleteItem,
+    getAllLists,
+  } = useGlobalContext();
 
   const [currentList, setCurrentList] = useState<any>("");
 
-  const [editState, setEditState] = useState<any>("");
+  const [editState, setEditState] = useState<any>([]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const newItem = [
-      ...currentList.items,
-      { id: currentList.items.length + 1, name: currentItem },
-    ];
-    addNewItem({
-      list: currentList,
-      item: { id: currentList.items.length + 1, name: currentItem },
+
+    const newI = await addNewItem({
+      list: currentList.myListId,
+      item: { name: currentItem },
     });
-    setCurrentList({ ...currentList, items: [...newItem] });
+    console.log("in page: ", newI);
+
+    const newL = { ...currentList, items: [...currentList.items, newI] };
+    setCurrentList(newL);
+
+    const newEdState = newL.items.map((l: any) => {
+      return { id: l.myItemId, edit: false };
+    });
+
+    setEditState(newEdState);
+  };
+
+  const getListsDB = async () => {
+    if (!currentList) {
+      const res = await getAllLists();
+      const l = res.find((list: any) => list.name === params.name);
+      console.log(l);
+
+      setCurrentList(l);
+      if (l.items) {
+        const newEditItems = l.items.map((list: any) => {
+          return { id: list.id, edit: false };
+        });
+        setEditState(newEditItems);
+      }
+    }
   };
 
   useEffect(() => {
     // console.log(currentList);
-    if (!currentList) {
-      const l = findList(params.name);
-      console.log(l);
-      setCurrentList(l);
-      const newEditItems = l.items.map((list: any) => {
-        return { id: list.id, edit: false };
-      });
-      setEditState(newEditItems);
-    }
-  }, []);
+
+    getListsDB();
+  }, [currentList]);
 
   const handleEdit = (id: any) => {
     const newL = editState.map((list: any) => {
@@ -109,7 +132,7 @@ const page = ({ params }: any) => {
   return (
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
-        <button onClick={() => console.log(editState)}>log</button>
+        <button onClick={() => console.log(currentList)}>log</button>
         <div className="text-end w-[90%] lg:w-[100%]">
           <Button
             md
@@ -129,12 +152,12 @@ const page = ({ params }: any) => {
               return (
                 <form
                   className="w-[80%] lg:w-[33%] lg:flex lg:flex-col lg:items-center mb-10"
-                  key={item.myListId}
+                  key={item.itemId}
                   onSubmit={handleEditSubmit}
                 >
                   <h1 className="lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:w-[100%] lg:h-[100%]">
                     <input
-                      id={item.id}
+                      id={item.myListId}
                       className="w-[120px] text-4xl"
                       disabled={!editState[i]}
                       value={editState[i].edit ? currentItem : item.name}
@@ -173,11 +196,7 @@ const page = ({ params }: any) => {
               );
             })
           ) : (
-            <div className="w-[100%] lg:w-[100%] lg:flex lg:flex-col lg:items-center mb-10">
-              <h1 className=" ">
-                <span className=" text-4xl ">This list is empty</span>
-              </h1>
-            </div>
+            <div></div>
           )}
           {addItem && (
             <form
