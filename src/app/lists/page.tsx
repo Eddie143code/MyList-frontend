@@ -21,10 +21,10 @@ const Page = () => {
       getAllLists().then((l: any) => {
         setAllLists(l);
         const newEditList = l.map((list: any) => {
-          return { id: list.id, edit: false };
+          return { id: list.myListId, edit: false };
         });
         setEditState(newEditList);
-        // console.log(l);
+        console.log(l);
       });
     }
   };
@@ -35,87 +35,105 @@ const Page = () => {
     getListsDB();
   }, [Lists]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const newItem = {
-      //id: allLists.length + 1,
-      Name: currentListItem,
-    };
 
-    // setAllLists([...allLists, newItem]);
+    try {
+      const response = await addNewList({
+        Name: currentListItem,
+      });
+      console.log(response);
 
-    /*  const nL = [...allLists, newItem];
-    const newEdState = nL.map((l: any) => {
-      return { id: l.id, edit: false };
-    });
+      const newItem = {
+        myListId: response.myListId,
+        name: currentListItem,
+      };
 
-    */
-    // setEditState(newEdState);
+      const nL = [...allLists, newItem];
+      const newEdState = nL.map((l: any) => {
+        return { id: l.myListId, edit: false };
+      });
 
-    setAllLists("");
-    addNewList(newItem);
-    setCurrentListItem("");
-    setAddList(false);
-    getListsDB();
+      setEditState(newEdState);
+      setAllLists([...allLists, newItem]);
+      // setAllLists("");
+
+      setCurrentListItem("");
+      setAddList(false);
+      // getListsDB();
+    } catch (error) {
+      console.log(`handleSubmit: ${error}`);
+    }
   };
 
   const handleEdit = (id: any) => {
+    console.log(editState);
+    console.log(id);
+
     const newL = editState.map((list: any) => {
       if (list.id === id) {
         return { id: list.id, edit: !list.edit };
       }
       return list;
     });
+    // console.log(newL);
+
     setEditState(newL);
   };
 
-  const handleEditSubmit = (e: any) => {
+  const handleEditSubmit = async (e: any) => {
     e.preventDefault();
-    const findL = editState.find((l: any) => {
-      if (l.edit === true) return l;
-    });
-    // console.log(findL);
 
-    const newItem = {
-      id: findL.id,
-      name: currentListItem,
-      items: [],
-    };
-    //console.log(newItem);
+    try {
+      const findL = editState.find((l: any) => {
+        if (l.edit === true) return l;
+      });
+      // console.log(findL);
 
-    const nn = editState.map((l: any) => {
-      return { id: l.id, edit: false };
-    });
-    setEditState(nn);
-    // console.log(editState);
+      const newItem = {
+        myListId: findL.id,
+        Name: currentListItem,
+        items: [],
+      };
 
-    const newList = allLists.map((list: any) => {
-      if (list.id == newItem.id) {
-        return newItem;
-      }
-      return list;
-    });
-    setAllLists(newList);
-    editList(newItem);
+      const response = await editList(newItem);
+
+      //console.log(newItem);
+
+      const nn = editState.map((l: any) => {
+        return { id: l.id, edit: false };
+      });
+      setEditState(nn);
+      // console.log(editState);
+
+      const newList = allLists.map((list: any) => {
+        if (list.myListId == newItem.myListId) {
+          return newItem;
+        }
+        return list;
+      });
+      setAllLists(newList);
+    } catch (error) {
+      console.log(`handleEditSubmit: ${error}`);
+    }
   };
 
-  const handleDelete = (id: any) => {
-    /* const fillList = allLists.filter((list: any) => list.id !== id);
-
-    const fillState = fillList.map((l: any) => {
-      return { id: l.id, edit: false };
-    });
-
+  const handleDelete = async (id: any) => {
     // console.log(fillState);
+    try {
+      const response = await deleteList(id);
 
+      const fillList = allLists.filter((list: any) => list.myListId !== id);
 
-    setEditState(fillState);
-    setAllLists(fillList);
-    */
-    deleteList(id);
-    setAllLists("");
+      const fillState = fillList.map((l: any) => {
+        return { id: l.id, edit: false };
+      });
 
-    getListsDB();
+      setEditState(fillState);
+      setAllLists(fillList);
+    } catch (error) {
+      console.log(`handleDelete: ${error}`);
+    }
   };
 
   return (
@@ -130,7 +148,7 @@ const Page = () => {
             clickMethod={() => {
               setAddList(!addList);
               const closeEdit = allLists.map((l: any) => {
-                return { id: l.id, edit: false };
+                return { id: l.myListId, edit: false };
               });
               setEditState(closeEdit);
             }}
@@ -162,7 +180,7 @@ const Page = () => {
                         type="button"
                         xs
                         text={editState[i].edit ? "Cancel" : "Edit"}
-                        clickMethod={() => handleEdit(list.id)}
+                        clickMethod={() => handleEdit(list.myListId)}
                       />
                       {editState[i].edit && (
                         <Button type="submit" xs text={"Save"} />
@@ -180,7 +198,7 @@ const Page = () => {
                       sm
                       text="See more"
                       type="button"
-                      location={`/lists/${list.name.toLowerCase()}`}
+                      location={`/lists/${list.name}`}
                     />
                   </div>
                 </form>

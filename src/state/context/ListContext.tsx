@@ -5,6 +5,7 @@ import { loginUserService, registerUserService } from "../services/userService";
 import {
   createList,
   deleteExistingList,
+  editExistingList,
   fetchAllLists,
 } from "../services/ListService";
 
@@ -27,19 +28,37 @@ export const AppProvider = ({ children }: any) => {
   };
 
   const addNewList = async (req: any) => {
-    const res = await createList(req);
-    dispatch({ type: "ADD_NEW_LIST", payload: res });
-  };
-
-  const editList = (req: any) => {
-    console.log("this is request in editList: ", req);
-    dispatch({ type: "EDIT_EXISTING_LIST", payload: req });
+    try {
+      const res = await createList(req);
+      dispatch({ type: "ADD_NEW_LIST", payload: res });
+      return res;
+    } catch (error) {
+      return error;
+    }
   };
 
   const deleteList = async (req: any) => {
     //console.log("this is request in deleteList: ", req);
-    const res = await deleteExistingList(req);
-    dispatch({ type: "DELETE_EXISTING_LIST", payload: req });
+    try {
+      const res = await deleteExistingList(req);
+      dispatch({ type: "DELETE_EXISTING_LIST", payload: req });
+      return res;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const editList = async (req: any) => {
+    console.log("this is request in editList: ", req);
+    try {
+      const res = await editExistingList(req);
+      const { myListId, Name, items } = res;
+      const p = { myListId: myListId, name: Name, items: items };
+      dispatch({ type: "EDIT_EXISTING_LIST", payload: p });
+      return res;
+    } catch (error) {
+      return error;
+    }
   };
 
   const findList = (req: any) => {

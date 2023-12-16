@@ -21,15 +21,15 @@ export const reducer = (state: any, action: any) => {
         }
         return l;
       });
-      console.log(newnewL);
+      // console.log(newnewL);
 
       return { Lists: [...newnewL] };
 
     case "DELETE_EXISTING_LIST":
+      console.log("in deleteExistingList");
       const newDL = state.Lists.filter((list: any) => {
         return list.id !== action.payload;
       });
-      console.log(newDL);
 
       return { Lists: [...newDL] };
 
