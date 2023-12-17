@@ -9,15 +9,8 @@ import { createItem } from "@/state/services/ItemService";
 const page = ({ params }: any) => {
   const [addItem, setAddItem] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<string>("");
-  const {
-    Lists,
-    addNewList,
-    findList,
-    addNewItem,
-    editItem,
-    deleteItem,
-    getAllLists,
-  } = useGlobalContext();
+  const { Lists, addNewItem, editItem, deleteItem, getAllLists } =
+    useGlobalContext();
 
   const [currentList, setCurrentList] = useState<any>("");
 
@@ -25,35 +18,41 @@ const page = ({ params }: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    try {
+      const newI = await addNewItem({
+        list: currentList.myListId,
+        item: { name: currentItem },
+      });
+      console.log("in page: ", newI);
 
-    const newI = await addNewItem({
-      list: currentList.myListId,
-      item: { name: currentItem },
-    });
-    console.log("in page: ", newI);
+      const newL = { ...currentList, items: [...currentList.items, newI] };
+      setCurrentList(newL);
 
-    const newL = { ...currentList, items: [...currentList.items, newI] };
-    setCurrentList(newL);
+      const newEdState = newL.items.map((l: any) => {
+        return { id: l.myItemId, edit: false };
+      });
 
-    const newEdState = newL.items.map((l: any) => {
-      return { id: l.myItemId, edit: false };
-    });
-
-    setEditState(newEdState);
+      setEditState(newEdState);
+      setCurrentItem("");
+      setAddItem(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getListsDB = async () => {
     if (!currentList) {
       const res = await getAllLists();
       const l = res.find((list: any) => list.name === params.name);
-      console.log(l);
+      //console.log(l);
 
       setCurrentList(l);
       if (l.items) {
         const newEditItems = l.items.map((list: any) => {
-          return { id: list.id, edit: false };
+          return { id: list.itemId, edit: false };
         });
         setEditState(newEditItems);
+        // console.log(newEditItems);
       }
     }
   };
@@ -71,67 +70,80 @@ const page = ({ params }: any) => {
       }
       return list;
     });
-    console.log(newL);
+    // console.log(newL);
 
     setEditState(newL);
   };
 
-  const handleEditSubmit = (e: any) => {
+  const handleEditSubmit = async (e: any) => {
     e.preventDefault();
-    const findL = editState.find((l: any) => {
-      if (l.edit === true) return l;
-    });
-    //console.log(findL);
 
-    const newItem = {
-      id: findL.id,
-      name: currentItem,
-    };
-    console.log(newItem);
+    try {
+      const findL = editState.find((l: any) => {
+        if (l.edit === true) return l;
+      });
+      //console.log(findL);
 
-    const nn = editState.map((l: any) => {
-      return { id: l.id, edit: false };
-    });
-    setEditState(nn);
-    // console.log(editState);
+      const newItem = {
+        itemId: findL.id,
+        name: currentItem,
+      };
+      // console.log(newItem);
 
-    const newItemsList = currentList.items.map((list: any) => {
-      if (list.id == newItem.id) {
-        return newItem;
-      }
-      return list;
-    });
-    const newList = {
-      ...currentList,
-      items: newItemsList,
-    };
-    console.log(newList);
+      const res = await editItem({ item: newItem, list: currentList.myListId });
+      console.log(res);
 
-    setCurrentList(newList);
-    editItem({ list: currentList, item: newItem });
+      const nn = editState.map((l: any) => {
+        return { id: l.id, edit: false };
+      });
+      setEditState(nn);
+      // console.log(editState);
+
+      const newItemsList = currentList.items.map((list: any) => {
+        if (list.itemId == newItem.itemId) {
+          return newItem;
+        }
+        return list;
+      });
+      const newList = {
+        ...currentList,
+        items: newItemsList,
+      };
+      //console.log(newList);
+
+      setCurrentList(newList);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDelete = (id: any) => {
-    const fillItems = currentList.items.filter((item: any) => item.id !== id);
-    const fillList = {
-      id: currentList.id,
-      name: currentList.name,
-      items: fillItems,
-    };
-    const fillState = fillItems.map((l: any) => {
-      return { id: l.id, edit: false };
-    });
+  const handleDelete = async (id: any) => {
+    try {
+      const res = await deleteItem({ itemId: id, list: currentList.myListId });
 
-    // console.log(fillState);
+      const fillItems = currentList.items.filter(
+        (item: any) => item.itemId !== id
+      );
+      const fillList = {
+        myListId: currentList.myListId,
+        name: currentList.name,
+        items: fillItems,
+      };
+      const fillState = fillItems.map((l: any) => {
+        return { id: l.itemId, edit: false };
+      });
 
-    setEditState(fillState);
-    setCurrentList(fillList);
-    deleteItem(fillList);
+      // console.log(fillState);
+
+      setEditState(fillState);
+      setCurrentList(fillList);
+    } catch (error) {}
   };
 
   return (
     <main className="flex flex-col items-center w-[90%]">
       <section className="flex flex-col mt-10 gap-14 lg:w-[70%] lg:max-w-[800px]">
+        <button onClick={() => console.log(Lists)}>log</button>
         <button onClick={() => console.log(currentList)}>log</button>
         <div className="text-end w-[90%] lg:w-[100%]">
           <Button
@@ -172,7 +184,7 @@ const page = ({ params }: any) => {
                         type="button"
                         xs
                         text={editState[i].edit ? "Cancel" : "Edit"}
-                        clickMethod={() => handleEdit(item.id)}
+                        clickMethod={() => handleEdit(item.itemId)}
                       />
                       {editState[i].edit && (
                         <Button type="submit" xs text={"Save"} />
@@ -181,7 +193,7 @@ const page = ({ params }: any) => {
                         type="button"
                         xs
                         text={"delete"}
-                        clickMethod={() => handleDelete(item.id)}
+                        clickMethod={() => handleDelete(item.itemId)}
                       />
                     </span>
                   </h1>

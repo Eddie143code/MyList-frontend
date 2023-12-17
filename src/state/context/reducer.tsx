@@ -36,7 +36,7 @@ export const reducer = (state: any, action: any) => {
 
     // ITEM
     case "ADD_NEW_ITEM":
-      console.log("in addNewList");
+      //  console.log("in addNewList");
 
       const newL = state.Lists.map((l: any) => {
         if (l.myListId == action.payload.myListId) {
@@ -50,7 +50,7 @@ export const reducer = (state: any, action: any) => {
         }
         return l;
       });
-      console.log(newL);
+      // console.log(newL);
 
       return {
         Lists: [...newL],
@@ -58,18 +58,19 @@ export const reducer = (state: any, action: any) => {
 
     case "EDIT_EXISTING_ITEM":
       const newnewI = state.Lists.map((l: any) => {
-        if (l.id === action.payload.list.id) {
+        if (l.myListId === action.payload.myListId) {
           const nnI = l.items.map((ll: any) => {
-            if (ll.id === action.payload.item.id) {
-              return action.payload.item;
+            if (ll.itemId === action.payload.itemId) {
+              return {
+                itemId: action.payload.itemId,
+                name: action.payload.name,
+              };
             }
             return ll;
           });
-          console.log(nnI);
-
           return {
-            id: action.payload.list.id,
-            name: action.payload.list.name,
+            myListId: l.myListId,
+            name: l.name,
             items: [...nnI],
           };
         }
@@ -81,8 +82,14 @@ export const reducer = (state: any, action: any) => {
 
     case "DELETE_EXISTING_ITEM":
       const nDI = state.Lists.map((list: any) => {
-        if (list.id === action.payload.id) {
-          return action.payload;
+        if (list.myListId === action.payload.myListId) {
+          const n = state.Lists.myListId.map((l: any) => {
+            if (l.itemId == action.payload.itemId) {
+              return;
+            }
+            return l;
+          });
+          return n;
         }
         return list;
       });

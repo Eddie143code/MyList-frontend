@@ -8,7 +8,11 @@ import {
   editExistingList,
   fetchAllLists,
 } from "../services/ListService";
-import { createItem } from "../services/ItemService";
+import {
+  createItem,
+  deleteExistingItem,
+  editExistingItem,
+} from "../services/ItemService";
 
 const initialState: any = {
   Lists: [],
@@ -78,22 +82,29 @@ export const AppProvider = ({ children }: any) => {
   };
 
   const addNewItem = async (req: any) => {
-    console.log("this is request: ", req);
+    // console.log("this is request: ", req);
     const res = await createItem(req);
-    console.log(res);
+    // console.log(res);
 
     dispatch({ type: "ADD_NEW_ITEM", payload: res });
     return res;
   };
 
-  const editItem = (req: any) => {
-    console.log("this is request in editItem: ", req);
-    dispatch({ type: "EDIT_EXISTING_ITEM", payload: req });
+  const editItem = async (req: any) => {
+    //  console.log("this is request in editItem: ", req);
+    try {
+      const res = await editExistingItem(req);
+      console.log(res);
+      dispatch({ type: "EDIT_EXISTING_ITEM", payload: res });
+    } catch (error) {}
   };
 
-  const deleteItem = (req: any) => {
+  const deleteItem = async (req: any) => {
     console.log("this is request in editItem: ", req);
-    dispatch({ type: "DELETE_EXISTING_ITEM", payload: req });
+    try {
+      const res = await deleteExistingItem(req);
+      dispatch({ type: "DELETE_EXISTING_ITEM", payload: res });
+    } catch (error) {}
   };
 
   const userRegister = (req: any) => {
