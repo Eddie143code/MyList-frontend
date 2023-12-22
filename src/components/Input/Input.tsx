@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ id, width, value, onChange, refValue }: any) => {
+const Input = ({ id, width, value, onChange, refValue, error }: any) => {
   return (
     <div
       className={`flex flex-col justify-center gap-2 w-[100%] 
@@ -33,6 +33,9 @@ const Input = ({ id, width, value, onChange, refValue }: any) => {
           className="border h-12"
         />
       )}
+      <div className=" w-[100%] text-start md:w-[210px] m-0 h-[30px] text-[#dc2626]">
+        <p>{error}</p>
+      </div>
     </div>
   );
 };

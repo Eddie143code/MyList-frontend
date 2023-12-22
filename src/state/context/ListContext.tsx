@@ -110,11 +110,11 @@ export const AppProvider = ({ children }: any) => {
   const userRegister = (req: any) => {
     // console.log(req);
 
-    registerUserService(req);
+    return registerUserService(req);
   };
 
   const userLogin = (req: any) => {
-    loginUserService(req);
+    return loginUserService(req);
   };
   return (
     <AppContext.Provider

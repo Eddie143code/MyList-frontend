@@ -19,6 +19,10 @@ const Page = () => {
   const getListsDB = () => {
     if (!allLists) {
       getAllLists().then((l: any) => {
+        if (l.message) {
+          setAllLists([]);
+          return;
+        }
         setAllLists(l);
         const newEditList = l.map((list: any) => {
           return { id: list.myListId, edit: false };
@@ -27,8 +31,9 @@ const Page = () => {
         console.log(l);
       });
     }
+    console.log("yo");
   };
-  
+
   useEffect(() => {
     // console.log(Lists);
     // console.log(editState);

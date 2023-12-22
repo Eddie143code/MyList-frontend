@@ -4,6 +4,11 @@ export const reducer = (state: any, action: any) => {
     case "GET_LISTS":
       // console.log("in getList: ", action.payload);
       const gL = action.payload;
+      console.log(gL);
+
+      if (gL.message) {
+        return { ...state, Lists: [gL] };
+      }
       return {
         ...state,
         Lists: [...gL],
