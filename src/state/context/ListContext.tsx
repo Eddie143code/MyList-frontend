@@ -1,7 +1,11 @@
 "use client";
 import { useContext, createContext, useState, useReducer } from "react";
 import { reducer } from "./reducer";
-import { loginUserService, registerUserService } from "../services/UserService";
+import {
+  loginUserService,
+  registerUserService,
+  logoutUserService,
+} from "../services/UserService";
 import {
   createList,
   deleteExistingList,
@@ -116,6 +120,10 @@ export const AppProvider = ({ children }: any) => {
   const userLogin = (req: any) => {
     return loginUserService(req);
   };
+
+  const userLogout = () => {
+    return logoutUserService();
+  };
   return (
     <AppContext.Provider
       value={{
@@ -130,6 +138,7 @@ export const AppProvider = ({ children }: any) => {
         userRegister,
         userLogin,
         getAllLists,
+        userLogout,
       }}
     >
       {children}

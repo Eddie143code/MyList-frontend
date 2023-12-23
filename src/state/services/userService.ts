@@ -21,3 +21,16 @@ export const loginUserService = async (payload: any) => {
 
   return response;
 };
+
+export const logoutUserService = async () => {
+  const response = await axios.post(
+    `${url}/Account/logout`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  console.log(response);
+  return response;
+};

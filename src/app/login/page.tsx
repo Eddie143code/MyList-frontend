@@ -31,7 +31,7 @@ const page = () => {
     // console.log(obj);
     try {
       await userLogin(obj);
-      //router.push("/lists");
+      router.push("/lists");
     } catch (error) {
       console.log(error);
       return setError("Email or Password does not match");
