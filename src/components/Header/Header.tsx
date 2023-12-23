@@ -16,10 +16,9 @@ const Header = () => {
   return (
     <header className="flex flex-col justify-center items-center mt-5 lg:mt-20">
       <div className="flex w-[300px] mb-[50px] lg:w-[600px]">
-        <div className="w-[50%]">
+        <div className="w-[100%] flex justify-center gap-5">
           <Button sm text="Home" type="button" location="/" />
-        </div>
-        <div className="w-[50%] flex justify-end">
+          <Button sm text="Lists" type="button" location="/lists" />
           <Button
             sm
             text="Sign Out"
@@ -28,7 +27,9 @@ const Header = () => {
           />
         </div>
       </div>
-      <h1 className="text-7xl ">MyList</h1>
+      <div>
+        <h1 className="text-7xl ">MyList</h1>
+      </div>
     </header>
   );
 };

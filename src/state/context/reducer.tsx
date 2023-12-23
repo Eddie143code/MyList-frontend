@@ -45,10 +45,11 @@ export const reducer = (state: any, action: any) => {
 
       const newL = state.Lists.map((l: any) => {
         if (l.myListId == action.payload.myListId) {
+          console.log(state.Lists);
+
           return {
-            ...state.Lists[action.payload.myListI],
             items: [
-              ...state.Lists[action.payload.myListId].items,
+              ...l.items,
               { itemId: action.payload.itemId, name: action.payload.name },
             ],
           };

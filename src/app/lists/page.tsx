@@ -172,7 +172,7 @@ const Page = () => {
                   <h1 className="lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:w-[100%] lg:h-[100%]">
                     <input
                       id={list.id}
-                      className="w-[120px] text-4xl"
+                      className="w-[120px] text-4xl "
                       disabled={!editState[i]}
                       value={editState[i].edit ? currentListItem : list.name}
                       onChange={(e: any) => {
