@@ -2,7 +2,7 @@ import axios from "axios";
 const url = process.env.NEXT_PUBLIC_API;
 
 export const fetchAllLists = async () => {
-  const response = await fetch("https://localhost:7284/api/MyList", {
+  const response = await fetch(`${url}/MyList`, {
     method: "GET",
     credentials: "include", // include cookies
   });
@@ -22,10 +22,7 @@ export const createList = async (req: any) => {
     body: JSON.stringify(req),
   };
 
-  const response: any = await fetch(
-    "https://localhost:7284/api/MyList",
-    requestOptions
-  );
+  const response: any = await fetch(`${url}/MyList`, requestOptions);
   const data = await response.json();
   console.log(data);
 
@@ -44,10 +41,7 @@ export const deleteExistingList = async (req: any) => {
   };
   //console.log(req);
 
-  const response: any = await fetch(
-    `https://localhost:7284/api/MyList/${req}`,
-    requestOptions
-  );
+  const response: any = await fetch(`${url}/MyList/${req}`, requestOptions);
 
   const data = await response.json();
   console.log(data);
@@ -67,7 +61,7 @@ export const editExistingList = async (req: any) => {
   };
 
   const response: any = await fetch(
-    `https://localhost:7284/api/MyList/${req.myListId}`,
+    `${url}/MyList/${req.myListId}`,
     requestOptions
   );
 

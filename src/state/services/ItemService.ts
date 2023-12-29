@@ -1,3 +1,5 @@
+const url = process.env.NEXT_PUBLIC_API;
+
 export const createItem = async (req: any) => {
   const a = { Name: req.item.name };
   const requestOptions: any = {
@@ -12,7 +14,7 @@ export const createItem = async (req: any) => {
   console.log(req);
 
   const response: any = await fetch(
-    `https://localhost:7284/api/MyList/${req.list}/items`,
+    `${url}/MyList/${req.list}/items`,
     requestOptions
   );
   const data = await response.json();
@@ -36,7 +38,7 @@ export const editExistingItem = async (req: any) => {
   //console.log(req);
 
   const response: any = await fetch(
-    `https://localhost:7284/api/MyList/${list}/items/${item.itemId}`,
+    `${url}/MyList/${list}/items/${item.itemId}`,
     requestOptions
   );
   const data = await response.json();
@@ -58,7 +60,7 @@ export const deleteExistingItem = async (req: any) => {
   };
 
   const response: any = await fetch(
-    `https://localhost:7284/api/MyList/${list}/items/${itemId}`,
+    `${url}/MyList/${list}/items/${itemId}`,
     requestOptions
   );
   const data = await response.json();

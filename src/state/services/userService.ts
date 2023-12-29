@@ -2,10 +2,13 @@ import axios from "axios";
 const url = process.env.NEXT_PUBLIC_API;
 
 export const registerUserService = async (payload: any) => {
-  console.log(payload);
+  console.log("in registerUser: ", payload);
 
   const response = await fetch(`${url}/Account/register`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(payload),
   });
   return response;
@@ -14,12 +17,18 @@ export const registerUserService = async (payload: any) => {
 export const loginUserService = async (payload: any) => {
   console.log(payload);
 
-  const response = await axios.post(`${url}/Account/login`, payload, {
-    withCredentials: true,
+  const response = await fetch(`${url}/Account/login`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
-  console.log(response);
-
-  return response;
+  if (response.ok) {
+    return response;
+  }
+  throw Error;
 };
 
 export const logoutUserService = async () => {

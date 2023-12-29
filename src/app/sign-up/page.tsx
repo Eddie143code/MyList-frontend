@@ -17,6 +17,7 @@ const page = () => {
   const router = useRouter();
 
   const { userRegister } = useGlobalContext();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
