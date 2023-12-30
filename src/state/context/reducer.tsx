@@ -89,7 +89,7 @@ export const reducer = (state: any, action: any) => {
     case "DELETE_EXISTING_ITEM":
       const nDI = state.Lists.map((list: any) => {
         if (list.myListId === action.payload.myListId) {
-          const n = state.Lists.myListId.map((l: any) => {
+          const n = list.items.map((l: any) => {
             if (l.itemId == action.payload.itemId) {
               return;
             }

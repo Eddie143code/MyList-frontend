@@ -29,8 +29,9 @@ const page = ({ params }: any) => {
       setCurrentList(newL);
 
       const newEdState = newL.items.map((l: any) => {
-        return { id: l.myItemId, edit: false };
+        return { id: l.itemId, edit: false };
       });
+      console.log(newEdState);
 
       setEditState(newEdState);
       setCurrentItem("");
@@ -88,10 +89,10 @@ const page = ({ params }: any) => {
         itemId: findL.id,
         name: currentItem,
       };
-      // console.log(newItem);
+      console.log(newItem);
 
       const res = await editItem({ item: newItem, list: currentList.myListId });
-      console.log(res);
+      // console.log(res);
 
       const nn = editState.map((l: any) => {
         return { id: l.id, edit: false };
